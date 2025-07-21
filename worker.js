@@ -2,16 +2,19 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // Меняем URL запроса с Cloudflare на твой Render-сервер
-    url.hostname = "key-system-eme7.onrender.com";
+    if (url.pathname === '/token') {
+      const proxyUrl = 'https://key-system-eme7.onrender.com/token';
 
-    const modifiedRequest = new Request(url.toString(), {
-      method: request.method,
-      headers: request.headers,
-      body: request.body,
-      redirect: "follow"
-    });
+      const newRequest = new Request(proxyUrl, {
+        method: request.method,
+        headers: request.headers,
+        body: request.method === 'GET' ? null : await request.text(),
+        redirect: 'follow'
+      });
 
-    return fetch(modifiedRequest);
+      return fetch(newRequest);
+    }
+
+    return new Response('Route not found', { status: 404 });
   }
 }
