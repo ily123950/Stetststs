@@ -3,7 +3,7 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/token') {
-      const proxyUrl = 'https://key-system-eme7.onrender.com/generate'; // <-- здесь важно
+      const proxyUrl = 'https://key-system-eme7.onrender.com/token'; // <--- было /generate, стало /token
 
       const newRequest = new Request(proxyUrl, {
         method: request.method,
